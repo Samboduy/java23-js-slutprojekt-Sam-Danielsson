@@ -1,4 +1,6 @@
-console.log("Hello World");
+import { getPopularRatedMovies } from "./js/getPopularRatedMovies.js";
+
+
 
 // const words = " Hello Sam Im 23 ";
 // words.trim();
@@ -6,6 +8,10 @@ console.log("Hello World");
 
 
 
+
+// Access Token Object For Auhtentication in TMDB API 
+
+const url = "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1";
 const options = {
   method: 'GET',
   headers: {
@@ -14,7 +20,8 @@ const options = {
   }
 };
 
-fetch('https://api.themoviedb.org/3/search/movie?query=Deep%20Rising&include_adult=false&language=en-US&page=1', options)
-  .then(response => response.json())
-  .then(response => console.log(response))
-  .catch(err => console.error(err));
+getPopularRatedMovies(url, options);
+
+const select = document.querySelector("select")
+  .value;
+console.log(select);

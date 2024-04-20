@@ -1,5 +1,6 @@
+import { options } from "./apiAuthentication.js";
 /*gets the most popular or highest rated movies*/
-export async function getPopularRatedMovies(btnIdTxt, options) {
+export async function getPopularRatedMovies(btnIdTxt) {
   let pageTitleEl = document.getElementById("pageTitle");
   console.log(pageTitleEl)
   if (btnIdTxt == "popular") {

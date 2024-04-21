@@ -21,19 +21,27 @@ displayMovie(await getPopularRatedMovies("popular"), true, contentContainer);
 
 async function topTenHandler(event) {
   event.preventDefault();
+  contentContainer.innerHTML = "";
   const btnIdTxt = event.target.id;
   console.log(btnIdTxt)
   const array = await getPopularRatedMovies(btnIdTxt);
 
   displayMovie(array, true, contentContainer);
 }
-function searchHandler(event) {
+async function searchHandler(event) {
+  contentContainer.innerHTML = "";
   event.preventDefault();
   const optionsIndex = select.options.selectedIndex;
   const optionId = allOptionEl[optionsIndex].id;
   const fixedQuery = userQuery.value.trim().replaceAll(" ", "%20").toLowerCase();
   console.log(fixedQuery);
-  searchMovieCelebrity(optionId, fixedQuery);
+  let data = await searchMovieCelebrity(optionId, fixedQuery, 1);
+  displayMovie(data.results, false,)
+  if (data.total_pages > 1) {
+    for (let i = 2; i < data.total_pages + 1; i++)
+      data = await searchMovieCelebrity(optionId, fixedQuery, i);
+    displayMovie(data.results, false,);
+  }
 }
 
 

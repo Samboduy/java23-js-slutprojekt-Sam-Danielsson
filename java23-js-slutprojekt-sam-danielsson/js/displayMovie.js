@@ -1,8 +1,7 @@
 /*displays title, release date and image of a movie*/
-export function displayMovie(movieArray, organisedListTrueFalse, contentContainer) {
+export function displayMovie(movieArray, organisedListTrueFalse) {
     const imgBaseUrl = "https://image.tmdb.org/t/p/w500";
     const organisedListContainer = document.createElement("ol");
-    contentContainer.innerHTML = "";
     for (const movie of movieArray) {
         //html
         const movieContainer = document.createElement("div");
@@ -14,6 +13,7 @@ export function displayMovie(movieArray, organisedListTrueFalse, contentContaine
         const releaseDate = `Released:${movie.release_date}`;
         const completeImgUrl = imgBaseUrl + `/${movie.poster_path}`;
         imgEl.src = completeImgUrl;
+        console.log(imgEl);
         titleEl.innerText = title;
         releaseDateEl.innerText = releaseDate;
 

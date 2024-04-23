@@ -6,10 +6,43 @@ body{
     padding:0px;
     background-color: cadetblue;
     display: flex;
+    flex-wrap: wrap;
 }
-
+#everythingContainer{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 100%;
+}
+#pageTitleContainer{
+    justify-content: center;
+    width: 100%;
+    max-width: 100%;
+    text-align: center;
+}
+#searchFormContainer{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+#topTenFormContainer{
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    justify-content: center;
+}
 #formContainer{
     display: flex;
     width: 100%;
     justify-content: center;
+}
+.pageCont{
+    display: flex;
+    overflow: auto;
+    max-width: 10%;
+}
+
+.hide{
+    display: none;
 }

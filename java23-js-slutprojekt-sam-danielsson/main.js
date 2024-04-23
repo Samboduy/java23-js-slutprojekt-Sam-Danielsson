@@ -1,15 +1,20 @@
 import { getPopularRatedMovies } from "./js/getPopularRatedMovies.js";
 import { displayMovie } from "./js/displayMovie.js";
 import { searchMovieCelebrity } from "./js/searchMovieCelebrity.js";
+import { displayPageBtn } from "./js/displayPageBtn.js";
+
 //html element
+const pageContainer = document.getElementById("pageContainer");
 const topTenRatedBtn = document.getElementById("top_rated");
 const topTenPopularBtn = document.getElementById("popular");
 const searchForm = document.getElementById("searchForm");
 const contentContainer = document.getElementById("contentContainer");
-const select = document.querySelector("select");
-const allOptionEl = document.querySelectorAll("option");
-const userQuery = document.querySelector("input");
+const selectEl = document.querySelector("select");
+const userQueryEl = document.querySelector("input");
 
+//Change css styling
+pageContainer.classList.remove("pageCont");
+pageContainer.classList.add("hide");
 
 
 topTenRatedBtn.addEventListener("click", topTenHandler);
@@ -20,28 +25,47 @@ displayMovie(await getPopularRatedMovies("popular"), true, contentContainer);
 
 
 async function topTenHandler(event) {
+  pageContainer.classList.remove("pageCont");
+  pageContainer.classList.add("hide");
   event.preventDefault();
-  contentContainer.innerHTML = "";
   const btnIdTxt = event.target.id;
   console.log(btnIdTxt)
   const array = await getPopularRatedMovies(btnIdTxt);
 
   displayMovie(array, true, contentContainer);
 }
+
 async function searchHandler(event) {
-  contentContainer.innerHTML = "";
+
+  pageContainer.classList.remove("hide");
+  pageContainer.classList.add("pageCont");
   event.preventDefault();
-  const optionsIndex = select.options.selectedIndex;
-  const optionId = allOptionEl[optionsIndex].id;
-  const fixedQuery = userQuery.value.trim().replaceAll(" ", "%20").toLowerCase();
-  console.log(fixedQuery);
-  let data = await searchMovieCelebrity(optionId, fixedQuery, 1);
-  displayMovie(data.results, false,)
+
+  const movieOrCeleb = selectEl.value;
+  console.log(movieOrCeleb)
+
+  const query = userQueryEl.value.trim().replaceAll(" ", "%20").toLowerCase();
+  console.log(query);
+
+
+  let data = await searchMovieCelebrity(movieOrCeleb, query);
+
+  displayMovie(data.results, false)
+
+  //shows page buttons 
   if (data.total_pages > 1) {
-    for (let i = 2; i < data.total_pages + 1; i++)
-      data = await searchMovieCelebrity(optionId, fixedQuery, i);
-    displayMovie(data.results, false,);
+    for (let i = 1; i < data.total_pages + 1; i++) {
+      const pageBtn = document.createElement("button");
+      pageBtn.addEventListener("click", event => { pageBtnClick(movieOrCeleb, query, i) });
+      displayPageBtn(pageBtn, pageContainer, i);
+    }
   }
+}
+
+async function pageBtnClick(movieOrCeleb, query, page) {
+  let data = await searchMovieCelebrity(movieOrCeleb, query, page);
+
+  displayMovie(data.results, false);
 }
 
 

@@ -25,13 +25,17 @@ topTenRatedBtn.addEventListener("click", topTenHandler);
 topTenPopularBtn.addEventListener("click", topTenHandler);
 searchForm.addEventListener("submit", searchHandler)
 
-displayMovie(await getPopularRatedMovies("popular"), true, contentContainer);
+//Shows most popular movies when you enter the site
+displayMovie(await getPopularRatedMovies("popular").catch(error => console.log(error.message)), true, contentContainer);
 
-
+//handles if you click on top ten rated/popular movies, requests the movies and then shows the movies
 async function topTenHandler(event) {
+  //hides page buttons
+  event.preventDefault();
   pageContainer.classList.remove("pageCont");
   pageContainer.classList.add("hide");
-  event.preventDefault();
+
+
   const btnIdTxt = event.target.id;
   if (btnIdTxt == "popular") {
     pageTitleEl.innerText = "Top 10 Most Popular Movies";
@@ -39,19 +43,20 @@ async function topTenHandler(event) {
     pageTitleEl.innerText = "Top 10 Highest Rated Movies";
   }
   console.log(btnIdTxt)
-  const array = await getPopularRatedMovies(btnIdTxt);
+  const array = await getPopularRatedMovies(btnIdTxt).catch(error => console.log(error.message));
 
   displayMovie(array, true, contentContainer);
 }
 
+// handles when the user searches for a movie/person and requests what the user searched for and displays it
 async function searchHandler(event) {
-
+  //shows page buttons
+  event.preventDefault();
   pageContainer.classList.remove("hide");
   pageContainer.classList.add("pageCont");
-  event.preventDefault();
+
 
   const movieOrCeleb = selectEl.value;
-
   console.log(movieOrCeleb)
 
   const query = userQueryEl.value.trim().replaceAll(" ", "%20").toLowerCase();
@@ -73,10 +78,11 @@ async function searchHandler(event) {
 
 
   pageContainer.innerHTML = "";
-  //shows page buttons 
+  //
   if (data.total_pages > 1) {
     pageLabelEl.innerText = "page:";
     pageContainer.append(pageLabelEl)
+
     for (let i = 1; i < data.total_pages + 1; i++) {
       const pageBtn = document.createElement("button");
       pageBtn.addEventListener("click", event => { pageBtnClick(movieOrCeleb, query, i) });
@@ -87,8 +93,12 @@ async function searchHandler(event) {
 
 async function pageBtnClick(movieOrCeleb, query, page) {
   let data = await searchMovieCelebrity(movieOrCeleb, query, page);
+  if (movieOrCeleb == "movie") {
+    displayMovie(data.results, false);
+  } else {
+    displayCelebrity(data.results)
+  }
 
-  displayMovie(data.results, false);
 }
 
 

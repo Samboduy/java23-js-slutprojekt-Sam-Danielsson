@@ -14,7 +14,7 @@ export function displayMovie(movieArray, organisedListTrueFalse) {
         const imgEl = document.createElement("img");
         const desciptionEl = document.createElement("p");
 
-        movieContainer.classList.add("divSpec");
+        //  movieContainer.classList.add("divSpec");
 
         const title = movie.original_title;
         const releaseDate = `Released:${movie.release_date}`;

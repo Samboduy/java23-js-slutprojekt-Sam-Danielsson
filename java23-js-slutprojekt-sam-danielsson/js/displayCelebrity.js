@@ -44,8 +44,6 @@ export function displayCelebrity(celebArray) {
             listContainerEl.append(titleEl);
             organisedListContainer.appendChild(listContainerEl)
             celebContainer.append(imgEl, organisedListContainer);
-            console.log(organisedListContainer.innerText);
-            console.log(medium);
         }
 
         celebContainer.append(imgEl, organisedListContainer);

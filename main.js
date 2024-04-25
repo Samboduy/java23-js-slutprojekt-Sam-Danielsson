@@ -1,3 +1,4 @@
+
 import { getPopularRatedMovies } from "./js/getPopularRatedMovies.js";
 import { displayMovie } from "./js/displayMovie.js";
 import { searchMovieCelebrity } from "./js/searchMovieCelebrity.js";
@@ -14,6 +15,7 @@ const selectEl = document.querySelector("select");
 const userQueryEl = document.querySelector("input");
 const pageLabelEl = document.createElement("label");
 let pageTitleEl = document.getElementById("pageTitle");
+const originalSimilarMovieContainer = document.getElementById("orginial-similar-movie");
 
 
 //Change css styling
@@ -30,13 +32,15 @@ displayMovie(await getPopularRatedMovies("popular").catch(error => console.log(e
 
 //handles if you click on top ten rated/popular movies, requests the movies and then shows the movies
 async function topTenHandler(event) {
-  //hides page buttons
   event.preventDefault();
+  //hides page buttons
   pageContainer.classList.remove("pageCont");
   pageContainer.classList.add("hide");
 
+  originalSimilarMovieContainer.innerHTML = "";
 
   const btnIdTxt = event.target.id;
+  console.log(btnIdTxt);
   if (btnIdTxt == "popular") {
     pageTitleEl.innerText = "Top 10 Most Popular Movies";
   } else {
@@ -55,6 +59,7 @@ async function searchHandler(event) {
   pageContainer.classList.remove("hide");
   pageContainer.classList.add("pageCont");
 
+  originalSimilarMovieContainer.innerHTML = "";
 
   const movieOrCeleb = selectEl.value;
   console.log(movieOrCeleb)
@@ -78,37 +83,9 @@ async function searchHandler(event) {
 
 
   pageContainer.innerHTML = "";
-  //
-  if (data.total_pages > 1) {
-    pageLabelEl.innerText = "page:";
-    pageContainer.append(pageLabelEl)
-
-    for (let i = 1; i < data.total_pages + 1; i++) {
-      const pageBtn = document.createElement("button");
-      pageBtn.addEventListener("click", event => { pageBtnClick(movieOrCeleb, query, i) });
-      displayPageBtn(pageBtn, pageContainer, i);
-    }
+  const totalPages = data.total_pages;
+  //creates buttons  for the user to navigate to other pages of content
+  if (totalPages > 1) {
+    displayPageBtn(totalPages, movieOrCeleb, query, 1, true)
   }
 }
-
-async function pageBtnClick(movieOrCeleb, query, page) {
-  let data = await searchMovieCelebrity(movieOrCeleb, query, page);
-  if (movieOrCeleb == "movie") {
-    displayMovie(data.results, false);
-  } else {
-    displayCelebrity(data.results)
-  }
-
-}
-
-
-// const words = " Hello Sam Im 23 ";
-// words.trim();
-// console.log(words.trim().replaceAll(" ", "%20"));
-
-
-
-
-// const select = document.querySelector("select")
-//   .value;
-//console.log(select);

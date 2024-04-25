@@ -17,6 +17,7 @@ export async function getPopularRatedMovies(btnIdTxt) {
     const data = await response.json();
 
     const movieObjectArray = data.results;
+    console.log(movieObjectArray);
     const topTenMovieObjectArray = movieObjectArray.slice(0, 10);
     console.log(topTenMovieObjectArray);
 

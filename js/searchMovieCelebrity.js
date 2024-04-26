@@ -17,7 +17,6 @@ export async function searchMovieCelebrity(movieOrCeleb, query, page = 1) {
         if (data.total_results == 0) {
             throw new Error(`No Results for:${query}`);
         } else {
-            console.log(data);
             return data;
         }
     } else {

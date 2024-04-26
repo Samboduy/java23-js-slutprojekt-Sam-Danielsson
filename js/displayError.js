@@ -15,7 +15,5 @@ export function displayError(error) {
     } else {
         errorMessageEl.innerText = error.message;
     }
-
-    console.log("inside displayError");
     contentContainer.append(errorMessageEl);
 }

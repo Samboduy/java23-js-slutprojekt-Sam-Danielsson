@@ -4,7 +4,6 @@ import { displayError } from "./displayError.js";
 export async function getPopularRatedMovies(btnIdTxt) {
 
   let pageTitleEl = document.getElementById("pageTitle");
-  console.log(pageTitleEl)
 
   if (btnIdTxt == "popular") {
     pageTitleEl.innerText = "Top 10 Most Popular Movies";

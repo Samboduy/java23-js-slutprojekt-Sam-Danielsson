@@ -50,7 +50,6 @@ async function topTenHandler(event) {
   } else {
     pageTitleEl.innerText = "Top 10 Highest Rated Movies";
   }
-  console.log(btnIdTxt)
   const array = await getPopularRatedMovies(btnIdTxt).catch(displayError);
   if (typeof array !== "undefined") {
     displayMovie(array, true, contentContainer);
@@ -67,10 +66,8 @@ async function searchHandler(event) {
   originalSimilarMovieContainer.innerHTML = "";
 
   const movieOrCeleb = selectEl.value;
-  console.log(movieOrCeleb)
 
   const query = userQueryEl.value.trim().replaceAll(" ", "%20").toLowerCase();
-  console.log(query);
 
 
   let data;

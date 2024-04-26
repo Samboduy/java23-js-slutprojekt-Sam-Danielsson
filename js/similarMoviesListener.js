@@ -22,13 +22,10 @@ export async function similarMoviesListener(movieId, title, releaseDate, movieIm
     if (typeof data !== "undefined") {
         displayMovie(data.results, false);
         let totalPages = data.total_pages;
-        console.log(totalPages);
-
         //creates navigation buttons 
         if (totalPages > 1) {
 
             if (totalPages > 499) {
-                console.log("page")
                 totalPages = 500;
                 displayPageBtn(totalPages, "", "", movieId, false);
             } else {

@@ -1,4 +1,5 @@
 import { options } from "./apiAuthentication.js";
+import { displayError } from "./displayError.js";
 /*gets the most popular or highest rated movies*/
 export async function getPopularRatedMovies(btnIdTxt) {
 
@@ -12,21 +13,15 @@ export async function getPopularRatedMovies(btnIdTxt) {
   }
   const apiUrl = `https://api.themoviedb.org/3/movie/${btnIdTxt}?language=en-US&page=1`;
 
-  const response = await fetch(apiUrl, options);
+  const response = await fetch(apiUrl, options).catch(displayError);
   if (response.status == 200) {
     const data = await response.json();
 
     const movieObjectArray = data.results;
-    console.log(movieObjectArray);
     const topTenMovieObjectArray = movieObjectArray.slice(0, 10);
-    console.log(topTenMovieObjectArray);
 
     return topTenMovieObjectArray;
-  }
-  // if (response.status == 404) {
-  //   throw new Error("could not find movie");
-  // }
-  else {
+  } else {
     throw new Error("Something went wrong, try again later");
   }
 

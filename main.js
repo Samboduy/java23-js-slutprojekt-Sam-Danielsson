@@ -4,6 +4,7 @@ import { displayMovie } from "./js/displayMovie.js";
 import { searchMovieCelebrity } from "./js/searchMovieCelebrity.js";
 import { displayPageBtn } from "./js/displayPageBtn.js";
 import { displayCelebrity } from "./js/displayCelebrity.js";
+import { displayError } from "./js/displayError.js";
 
 //html element
 const pageContainer = document.getElementById("pageContainer");
@@ -28,7 +29,11 @@ topTenPopularBtn.addEventListener("click", topTenHandler);
 searchForm.addEventListener("submit", searchHandler)
 
 //Shows most popular movies when you enter the site
-displayMovie(await getPopularRatedMovies("popular").catch(error => console.log(error.message)), true, contentContainer);
+const array = await getPopularRatedMovies("popular").catch(displayError)
+if (typeof array !== "undefined") {
+  displayMovie(array, true, contentContainer);
+}
+
 
 //handles if you click on top ten rated/popular movies, requests the movies and then shows the movies
 async function topTenHandler(event) {
@@ -40,16 +45,16 @@ async function topTenHandler(event) {
   originalSimilarMovieContainer.innerHTML = "";
 
   const btnIdTxt = event.target.id;
-  console.log(btnIdTxt);
   if (btnIdTxt == "popular") {
     pageTitleEl.innerText = "Top 10 Most Popular Movies";
   } else {
     pageTitleEl.innerText = "Top 10 Highest Rated Movies";
   }
   console.log(btnIdTxt)
-  const array = await getPopularRatedMovies(btnIdTxt).catch(error => console.log(error.message));
-
-  displayMovie(array, true, contentContainer);
+  const array = await getPopularRatedMovies(btnIdTxt).catch(displayError);
+  if (typeof array !== "undefined") {
+    displayMovie(array, true, contentContainer);
+  }
 }
 
 // handles when the user searches for a movie/person and requests what the user searched for and displays it
@@ -71,21 +76,28 @@ async function searchHandler(event) {
   let data;
   if (movieOrCeleb == "movie") {
     pageTitleEl.innerText = "Movies"
-    data = await searchMovieCelebrity(movieOrCeleb, query);
-    displayMovie(data.results, false)
+    data = await searchMovieCelebrity(movieOrCeleb, query).catch(displayError);
+    if (typeof data !== "undefined") {
+      displayMovie(data.results, false)
+    }
+
   }
   else {
     pageTitleEl.innerText = "Celebrities"
-    data = await searchMovieCelebrity(movieOrCeleb, query);
-    console.log(data.results);
-    displayCelebrity(data.results);
+    data = await searchMovieCelebrity(movieOrCeleb, query).catch(displayError);
+    if (typeof data !== "undefined") {
+      displayCelebrity(data.results);
+    }
+
   }
 
-
-  pageContainer.innerHTML = "";
-  const totalPages = data.total_pages;
-  //creates buttons  for the user to navigate to other pages of content
-  if (totalPages > 1) {
-    displayPageBtn(totalPages, movieOrCeleb, query, 1, true)
+  if (typeof data !== "undefined") {
+    pageContainer.innerHTML = "";
+    const totalPages = data.total_pages;
+    //creates buttons  for the user to navigate to other pages of content
+    if (totalPages > 1) {
+      displayPageBtn(totalPages, movieOrCeleb, query, 1, true)
+    }
   }
+
 }
